@@ -10,6 +10,7 @@
 *.obj
 *.elf
 *.bin
+*.pyc
 
 # Packages #
 ############
