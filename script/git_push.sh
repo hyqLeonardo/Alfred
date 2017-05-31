@@ -1,7 +1,10 @@
 #!/bin/sh
 
-cd /media/ethan/Docs/projects/$1
+DIR=/media/ethan/Docs/projects/$1
 
-git add --all
-git commit -m 'Auto update'
-git push -u origin master
+if [ -d "$DIR" ]; then
+	cd $DIR
+	git add --all
+	git commit -m 'Auto update'
+	git push -u origin master
+fi
