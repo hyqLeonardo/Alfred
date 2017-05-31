@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import sys
 import voice
 import action
 
@@ -13,6 +13,8 @@ def alfred():
 		action.search_web(text.replace('search for ', ''))
 	elif "push project" in text:	# push project to github
 		action.git_push(text.replace('push project ', ''))
+	elif "update yourself" in text:
+		action.git_push('alfred')
 	elif "send email to" in text:	# auto send email
 		subject = 'auto send'
 		target = text.replace('send email to ', '')

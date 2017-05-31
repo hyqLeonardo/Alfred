@@ -7,4 +7,6 @@ if [ -d "$DIR" ]; then
 	git add --all
 	git commit -m 'Auto update'
 	git push -u origin master
+else
+	echo "No project named $DIR"
 fi
