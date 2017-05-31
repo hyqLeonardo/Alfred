@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import sys
 import voice
 import action
@@ -9,20 +10,23 @@ def alfred():
 
 	if text == 'play me some music':	# play music
 		action.open_web('http://music.163.com/')
-	elif "search for" in text:	# search google
+	elif 'search for' in text:	# search google
 		action.search_web(text.replace('search for ', ''))
-	elif "push project" in text:	# push project to github
+	elif 'push project' in text:	# push project to github
 		action.git_push(text.replace('push project ', ''))
-	elif "update yourself" in text:
+	elif 'update yourself' in text:
 		action.git_push('alfred')
-	elif "send email to" in text:	# auto send email
+	elif 'send email to' in text:	# auto send email
 		subject = 'auto send'
 		target = text.replace('send email to ', '')
 		action.record_email()
 		action.send_email(subject, target)
-	elif "well done" in text or "good job" in text:
-		# return 
+	elif 'well done' in text or 'good job' in text:
+		print 'all right'
 		sys.exit(0)
+		# return 
+	elif "let's call it a day" in text:
+		os.system('shutdown -s')
 	else:
 		print 'Pardon, sir'
 
