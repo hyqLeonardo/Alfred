@@ -1,6 +1,6 @@
 import os
 import webbrowser
-from git import Repo
+import subprocess
 
 
 from selenium import webdriver
@@ -35,12 +35,7 @@ def search_selen(website, content):
 
 # push project to github
 def git_push(project):
-	project_dir = '/media/ethan/Docs/projects/'
-	repo = Repo('project_dir' + project)
-	repo.index.add('--all')
-	repo.index.commit('Auto push')
-	origin = repo.remote('origin')
-	origin.push()
+	subprocess.call(['./script/git_push.sh', project])	
 
 # send email from txt file
 def send_email(file):
