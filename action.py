@@ -42,6 +42,10 @@ def git_push(project):
 	origin = repo.remote('origin')
 	origin.push()
 
+# send email from txt file
+def send_email(file):
+	pass
+
 # class (unittest.TestCase):
 #     def setUp(self):
 #         self.browser = webdriver.Chrome(chromedriver)
