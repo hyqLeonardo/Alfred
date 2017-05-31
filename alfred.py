@@ -12,6 +12,8 @@ def alfred():
 		action.open_web('http://music.163.com/')
 	elif "search for" in text:
 		action.search_web(text.replace('search for ', ''))
+	elif "push project" in text:
+		action.git_push(text.replace('push project ', ''))
 	else:
 		print 'Pardon, sir'
 

@@ -31,6 +31,9 @@ def search_selen(website, content):
 	search_box.submit()
 	time.sleep(3)
 
+# push project to github
+def git_push(project):
+	pass	
 
 # class (unittest.TestCase):
 #     def setUp(self):
