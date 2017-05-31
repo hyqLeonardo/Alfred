@@ -1,3 +1,5 @@
+#!/bin/sh
+
 cd /media/ethan/Docs/projects/$1
 
 git add --all
