@@ -1,10 +1,17 @@
+import voice
+from info import *	# all personal information
+
 import os
-import webbrowser
-import subprocess
-
-
+from datetime import datetime
+import subprocess	# for shell commands
+import webbrowser	# open browser
+# another way of control browser
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+# to send email
+import smtplib
+from email.mime.text import MIMEText
+
 
 # set environment for chromedriver
 chromedriver = "/media/ethan/Docs/projects/Alfred/chromedriver"
@@ -16,14 +23,14 @@ browser = webbrowser.get('google-chrome')
 def open_web(website):
 	browser.open_new_tab(website)
 
+def search_web(content):
+	website = 'http://www.google.com/search?btnG=1&q=%s' % content
+	browser.open_new_tab(website)	
+
 def open_selen(website):
 	driver = webdriver.Chrome(chromedriver)
 	driver.get(website)
 	time.sleep(3)
-
-def search_web(content):
-	website = 'http://www.google.com/search?btnG=1&q=%s' % content
-	browser.open_new_tab(website)	
 
 def search_selen(website, content):
 	driver = webdriver.Chrome(chromedriver)
@@ -37,24 +44,49 @@ def search_selen(website, content):
 def git_push(project):
 	subprocess.call(['./script/git_push.sh', project])	
 
-# send email from txt file
-def send_email(file):
-	pass
+# record emial message to a text file in ./temp
+def record_email():
 
-# class (unittest.TestCase):
-#     def setUp(self):
-#         self.browser = webdriver.Chrome(chromedriver)
+	text = voice.listen()
+	txtfile = './temp/email_' + (str(datetime.now())[:-10].replace(' ', '-'))
+	fb = open(txtfile, 'w+')
+	fb.write(text)
+	fb.close()
 
-#     def tearDown(self):
-#         self.browser.quit()
+# send recorded email
+def send_email(subject, target):
 
-#     def test_open_facebook_and_login(self):
+	# Open a plain text file for reading.  For this example, assume that
+	# the text file contains only ASCII characters.
+	txtfile = './temp/email_' + (str(datetime.now())[:-10].replace(' ', '-'))
+	fd = open(txtfile, 'rb')
+	# Create a text/plain message
+	msg = MIMEText(fd.read())
+	fd.close()
 
-#         self.browser.get('https://www.google.com')
-#         time.sleep(10)
-		# username_field = self.browser.find_element_by_name('email')
-		# password_field = self.browser.find_element_by_name('pass')
-
-		# username_field.send_keys('TYPE_USERNAME_HERE')
-		# password_field.send_keys('TYPE_PASSWORD_HERE')
-		# password_field.send_keys(Keys.RETURN)
+	# me == the sender's email address
+	# you == the recipient's email address
+	if target != 'work':	# personal email
+		me = PERSONAL_EMAIL
+		dest = EMAIL_TARGET[target]
+		msg['Subject'] = subject
+		msg['From'] = me
+		msg['To'] = ','.join(dest)
+		# Send the message via SMTP server, with login, but don't include the
+		# envelope header.
+		server = smtplib.SMTP(PERSONAL_EMAIL_HOST)
+		server.login(PERSONAL_EMAIL[:-8], PERSONAL_EMAIL_PASS)
+	else:
+		me = WORK_EMAIL
+		dest = EMAIL_TARGET[target]
+		msg['Subject'] = subject
+		msg['From'] = me
+		msg['To'] = dest
+		# Send the message via SMTP server, with login, but don't include the
+		# envelope header.
+		server = smtplib.SMTP(WORK_EMAIL_HOST)
+		server.login(WORK_EMAIL[:-8], WORK_EMAIL_PASS)
+	print me
+	print dest
+	server.sendmail(me, dest, msg.as_string())
+	server.quit()

@@ -5,15 +5,15 @@ def listen():
 	# obtain audio from the microphone
 	r = sr.Recognizer()
 	with sr.Microphone() as source:
-		print("Now I'm listening ~")
+		print("Alfred is listening")
 		audio = r.listen(source)
 
 	# recognize speech using Microsoft Bing Voice Recognition
 	BING_KEY = "72c9268836d5478980d267984273358a"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
 	try:
 		text = r.recognize_bing(audio, key=BING_KEY)
-		print text
-		return text
+		print 'Sir, I think you said ' + text
+		return str(text)
 	except sr.UnknownValueError:
 		print("I could not understand audio")
 	except sr.RequestError as e:

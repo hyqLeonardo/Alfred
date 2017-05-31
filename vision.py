@@ -1,8 +1,11 @@
 import cv2
 import numpy as np
 import math
+
 cap = cv2.VideoCapture(0)
+
 while(cap.isOpened()):
+
     ret, img = cap.read()
     cv2.rectangle(img,(300,300),(100,100),(0,255,0),0)
     crop_img = img[100:300, 100:300]
@@ -11,8 +14,8 @@ while(cap.isOpened()):
     blurred = cv2.GaussianBlur(grey, value, 0)
     _, thresh1 = cv2.threshold(blurred, 127, 255,
                                cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-    cv2.imshow('Thresholded', thresh1)
-
+    cv2.imshow('Thresholded', thresh1)  # show image
+    # check cv2 version
     (version, _, _) = cv2.__version__.split('.')
 
     if version is '3':
@@ -34,6 +37,7 @@ while(cap.isOpened()):
     defects = cv2.convexityDefects(cnt,hull)
     count_defects = 0
     cv2.drawContours(thresh1, contours, -1, (0,255,0), 3)
+    # main algoirthm, count defects
     for i in range(defects.shape[0]):
         s,e,f,d = defects[i,0]
         start = tuple(cnt[s][0])
@@ -50,7 +54,7 @@ while(cap.isOpened()):
         cv2.line(crop_img,start,end,[0,255,0],2)
         #cv2.circle(crop_img,far,5,[0,0,255],-1)
     if count_defects == 1:
-        cv2.putText(img,"I am Vipul", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+        cv2.putText(img,"Yes", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     elif count_defects == 2:
         str = "This is a basic hand gesture recognizer"
         cv2.putText(img, str, (5,50), cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
