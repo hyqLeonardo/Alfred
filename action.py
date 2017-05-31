@@ -1,5 +1,7 @@
 import os
 import webbrowser
+from git import Repo
+
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -33,7 +35,12 @@ def search_selen(website, content):
 
 # push project to github
 def git_push(project):
-	pass	
+	project_dir = '/media/ethan/Docs/projects/'
+	repo = Repo('project_dir' + project)
+	repo.index.add('--all')
+	repo.index.commit('Auto push')
+	origin = repo.remote('origin')
+	origin.push()
 
 # class (unittest.TestCase):
 #     def setUp(self):
