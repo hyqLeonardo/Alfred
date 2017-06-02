@@ -1,48 +1,75 @@
-import voice
+from util import *	# helper routines
 from info import *	# all personal information
+import voice
 
-import os
-from datetime import datetime
 import subprocess	# for shell commands
-import webbrowser	# open browser
-# another way of control browser
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-# to send email
+import google
 import smtplib
 from email.mime.text import MIMEText
 
-
-# set environment for chromedriver
-chromedriver = "/media/ethan/Docs/projects/Alfred/chromedriver"
-os.environ["webdriver.chrome.driver"] = chromedriver
-# set environment for webbrowser
-browser = webbrowser.get('google-chrome')
-
 ## Alfred's services
-def open_web(website):
-	browser.open_new_tab(website)
+# search google and open links
+class SearchGoogle:
 
-def search_web(content):
-	website = 'http://www.google.com/search?btnG=1&q=%s' % content
-	browser.open_new_tab(website)	
+	def __init__(self, query):
+		self.query = query	# search query
+		self.website = 'http://www.google.com/search?btnG=1&q=%s' % query
+		self.search_ans = ''
+		self.fetched_url = ''
 
-def open_selen(website):
-	driver = webdriver.Chrome(chromedriver)
-	driver.get(website)
-	time.sleep(3)
+	# convinient to run parallel in search_web()
+	def get_ans(self):
+		self.search_ans = voice.listen()
 
-def search_selen(website, content):
-	driver = webdriver.Chrome(chromedriver)
-	driver.get(website)
-	search_box = driver.find_element_by_name('q')
-	search_box.send_keys(content)
-	search_box.submit()
-	time.sleep(3)
+	# convinient to run parallel in search_web()
+	def fetch_url(self):
+		self.fetched_url = google.search(self.query, stop = 5)
+
+	def open_web(self, url):
+		browser.open(url)
+
+	# search, then open links
+	def search_web(self):
+		search_funcs = [self.fetch_url, self.get_ans]
+		self.open_web(self.website)
+		print 'Interested in some results?'
+		# listen voice and search web running in parallel, p1 finish before p2
+		run_parallel(search_funcs)
+		print self.search_ans
+		for i in range(2):
+			print self.fetched_url[i]
+		if 'yes' in self.search_ans or 'sure' in self.search_ans:	# open first (num) urls
+			print 'ok'
+			num = 3	# let's hard code this first
+			for url in self.fetched_url:
+				if num > 0:	
+					self.open_web(url)
+				else:
+					break
+				num -= 1	# pages left
+		else:
+			print 'someting is wrong'
+
+# def open_selen(website):
+# 	driver = webdriver.Chrome(chromedriver)
+# 	driver.get(website)
+# 	time.sleep(3)
+
+# def search_selen(website, query):
+# 	driver = webdriver.Chrome(chromedriver)
+# 	driver.get(website)
+# 	search_box = driver.find_element_by_name('q')
+# 	search_box.send_keys(query)
+# 	search_box.submit()
+# 	time.sleep(3)
 
 # push project to github
 def git_push(project):
-	subprocess.call(['./script/git_push.sh', project])	
+	if OS == 'linux':
+		subprocess.call(['./script/git_push.sh', project])
+	elif OS == 'win':
+		# subprocess.Popen('git_push.bat', cwd='\script')
+		subprocess.call(['/script/git_push.bash', project])	
 
 # record emial message to a text file in ./temp
 def record_email():
@@ -90,3 +117,6 @@ def send_email(subject, target):
 	print dest
 	server.sendmail(me, dest, msg.as_string())
 	server.quit()
+
+def gesture():
+	pass
