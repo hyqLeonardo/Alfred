@@ -7,6 +7,6 @@ if not exist %DIR% (
 ) else (
 	cd /d %DIR%
 	git add --all
-	git commit -m 'Auto update'
+	git commit -m "Auto update"
 	git push -u origin master
 )

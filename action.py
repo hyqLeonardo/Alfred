@@ -68,8 +68,9 @@ def git_push(project):
 	if OS == 'linux':
 		subprocess.call(['./script/git_push.sh', project])
 	elif OS == 'win':
-		# subprocess.Popen('git_push.bat', cwd='\script')
-		subprocess.call(['/script/git_push.bash', project])	
+		# subprocess.Popen('git_push.bat', cwd='D:\\projects\\alfred\\script')
+		batch_path = 'D:/projects/alfred/script/git_push.bat'
+		p = subprocess.Popen([batch_path, project], stdout=subprocess.PIPE)
 
 # record emial message to a text file in ./temp
 def record_email():
@@ -120,3 +121,5 @@ def send_email(subject, target):
 
 def gesture():
 	pass
+
+git_push('alfred')
