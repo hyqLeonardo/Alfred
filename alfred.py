@@ -51,7 +51,6 @@ def daemon():
 	if text == None:
 		return
 	if 'alfred' in text:	# wake up Alfred
-		print 'How can I help you, Sir'
 		alfred()
 
 if __name__ == '__main__':

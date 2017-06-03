@@ -10,7 +10,6 @@ def listen():
 
 	# recognize speech using Microsoft Bing Voice Recognition
 	BING_KEY = "72c9268836d5478980d267984273358a"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
-	text = r.recognize_bing(audio, key=BING_KEY)
 	try:
 		text = r.recognize_bing(audio, key=BING_KEY)
 		if text != None:
