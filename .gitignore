@@ -11,6 +11,7 @@
 *.elf
 *.bin
 *.pyc
+*.whl
 
 # Directories #
 ###################

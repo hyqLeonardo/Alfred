@@ -55,7 +55,7 @@ def daemon():
 
 if __name__ == '__main__':
 
-	while(True):
-		daemon()
-	# search = action.SearchGoogle("product manager")
-	# search.search_web()
+	# while(True):
+		# daemon()
+	search = action.SearchGoogle("product manager")
+	search.search_web()

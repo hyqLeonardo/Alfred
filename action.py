@@ -1,6 +1,7 @@
 from util import *	# helper routines
 from info import *	# all personal information
 import voice
+import vision
 
 import subprocess	# for shell commands
 import google
@@ -8,6 +9,11 @@ import smtplib
 from email.mime.text import MIMEText
 
 ## Alfred's services
+
+# control mouse and keyboard using gesture (camera required)
+def control():
+	pass
+
 # search google and open links
 class SearchGoogle:
 
@@ -28,19 +34,9 @@ class SearchGoogle:
 	def open_web(self, url):
 		browser.open(url)
 
-	# search, then open links
-	def search_web(self):
-		search_funcs = [self.fetch_url, self.get_ans]
-		self.open_web(self.website)
-		print 'Interested in some results?'
-		# listen voice and search web running in parallel, p1 finish before p2
-		run_parallel(search_funcs)
-		print self.search_ans
-		for i in range(2):
-			print self.fetched_url[i]
+	def open_page(self, num):
 		if 'yes' in self.search_ans or 'sure' in self.search_ans:	# open first (num) urls
 			print 'ok'
-			num = 3	# let's hard code this first
 			for url in self.fetched_url:
 				if num > 0:	
 					self.open_web(url)
@@ -48,7 +44,19 @@ class SearchGoogle:
 					break
 				num -= 1	# pages left
 		else:
-			print 'someting is wrong'
+			pass
+
+	# search, then open links
+	def search_web(self):
+		search_funcs = [self.get_ans, self.fetch_url, self.open_page]
+		self.open_web(self.website)
+		print 'Interested in some results?'
+		# listen voice and search web running in parallel, p1 finish before p2
+		run_parallel(search_funcs)
+		print 'What now ?'
+		control_ans = voice.listen()
+		if 'leave it to me' in control_ans:
+			gesture_control()
 
 # def open_selen(website):
 # 	driver = webdriver.Chrome(chromedriver)
