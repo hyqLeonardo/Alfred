@@ -50,7 +50,8 @@ def daemon():
 
 	if text == None:
 		return
-	if text[:6] == 'alfred':	# wake up Alfred
+	if 'alfred' in text:	# wake up Alfred
+		print 'How can I help you, Sir'
 		alfred()
 
 if __name__ == '__main__':

@@ -10,22 +10,18 @@ def listen():
 
 	# recognize speech using Microsoft Bing Voice Recognition
 	BING_KEY = "72c9268836d5478980d267984273358a"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
+	text = r.recognize_bing(audio, key=BING_KEY)
 	try:
 		text = r.recognize_bing(audio, key=BING_KEY)
-		if text == None:
-			print("Pardon ?")
-			listen()
-		elif text == 'alfred':
-			'How can I help you, Sir'
-		else:
+		if text != None:
 			print 'Sir, I think you said ' + text
-		return str(text)
+			return str(text)
+		else:
+			print 'Pardon ?'
 	except sr.UnknownValueError:
 		print("I didn't hear it clear, Pardon ?")
-		listen()
 	except sr.RequestError as e:
 		print("Could not request results from the service; {0}".format(e))
-		listen()
 
 	# # recognize speech using Sphinx
 	# try:
