@@ -13,16 +13,19 @@ def listen():
 	try:
 		text = r.recognize_bing(audio, key=BING_KEY)
 		if text == None:
+			print("Pardon ?")
 			listen()
-		if text == 'alfred':
+		elif text == 'alfred':
 			'How can I help you, Sir'
 		else:
 			print 'Sir, I think you said ' + text
 		return str(text)
 	except sr.UnknownValueError:
-		print("I could not understand audio")
+		print("I didn't hear it clear, Pardon ?")
+		listen()
 	except sr.RequestError as e:
 		print("Could not request results from the service; {0}".format(e))
+		listen()
 
 	# # recognize speech using Sphinx
 	# try:

@@ -22,6 +22,7 @@ class SearchGoogle:
 		self.website = 'http://www.google.com/search?btnG=1&q=%s' % query
 		self.search_ans = ''
 		self.fetched_url = ''
+		self.page_num = 3	# hard code this first
 
 	# convinient to run parallel in search_web()
 	def get_ans(self):
@@ -34,15 +35,15 @@ class SearchGoogle:
 	def open_web(self, url):
 		browser.open(url)
 
-	def open_page(self, num):
+	def open_page(self):
 		if 'yes' in self.search_ans or 'sure' in self.search_ans:	# open first (num) urls
 			print 'ok'
 			for url in self.fetched_url:
-				if num > 0:	
+				if self.page_num > 0:	
 					self.open_web(url)
 				else:
 					break
-				num -= 1	# pages left
+				self.page_num -= 1	# pages left
 		else:
 			pass
 
@@ -55,21 +56,9 @@ class SearchGoogle:
 		run_parallel(search_funcs)
 		print 'What now ?'
 		control_ans = voice.listen()
+		print control_ans
 		if 'leave it to me' in control_ans:
 			gesture_control()
-
-# def open_selen(website):
-# 	driver = webdriver.Chrome(chromedriver)
-# 	driver.get(website)
-# 	time.sleep(3)
-
-# def search_selen(website, query):
-# 	driver = webdriver.Chrome(chromedriver)
-# 	driver.get(website)
-# 	search_box = driver.find_element_by_name('q')
-# 	search_box.send_keys(query)
-# 	search_box.submit()
-# 	time.sleep(3)
 
 # push project to github
 def git_push(project):
@@ -78,7 +67,7 @@ def git_push(project):
 	elif OS == 'win':
 		# subprocess.Popen('git_push.bat', cwd='D:\\projects\\alfred\\script')
 		batch_path = 'D:/projects/alfred/script/git_push.bat'
-		p = subprocess.Popen([batch_path, project], stdout=subprocess.PIPE)
+		p = subprocess.Popen([batch_path, project])
 
 # record emial message to a text file in ./temp
 def record_email():
@@ -127,7 +116,3 @@ def send_email(subject, target):
 	server.sendmail(me, dest, msg.as_string())
 	server.quit()
 
-def gesture():
-	pass
-
-git_push('alfred')
